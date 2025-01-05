@@ -41,9 +41,8 @@ object DatasetLoader {
    * @param spark SparkSession
    * @return Dataset[Row]
    */
-  def loadBankingDataset(spark: SparkSession): Dataset[Row] = {
+  def loadBankingDataset(spark: SparkSession, path: String): Dataset[Row] = {
     val config = ConfigFactory.load()
-    val path = config.getString("spark.filePaths.comprehensiveBankingData")
     val format = config.getString("spark.fileFormats.defaultFormat")
     val options = config.getObject("spark.options").unwrapped().asInstanceOf[java.util.Map[String, String]].asScala.toMap
     load(spark, path, None, format, options)
