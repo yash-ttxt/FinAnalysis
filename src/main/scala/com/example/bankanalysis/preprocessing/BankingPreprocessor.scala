@@ -9,7 +9,7 @@ import scala.jdk.CollectionConverters._
 
 object BankingPreprocessor extends BasePreprocessor {
   private val config = ConfigFactory.load()
-  override def relevantColumns(): List[String] = config.getStringList("spark.relevantColumns.comprehensiveBankingData").asScala.toList
+  override def relevantColumns(): List[String] = config.getStringList("spark.comprehensiveBankingData.relevantColumns").asScala.toList
 
   override def cleanData(df: DataFrame): DataFrame = {
     val cityToBranchID = df.filter(col("City").isNotNull && col("Branch ID").isNotNull)
@@ -32,12 +32,17 @@ object BankingPreprocessor extends BasePreprocessor {
       ))
   }
 
+  override def renameColumns(df: DataFrame): DataFrame = {
+    val renameColVals = config.getObject("spark.comprehensiveBankingData.rawColNameToProcessedColName").unwrapped().asInstanceOf[java.util.Map[String, String]].asScala.toMap
+    renameColVals.foldLeft(df)((accDf, colName) => accDf.withColumnRenamed(colName._1, colName._2))
+  }
+
   override def preprocessData(df: DataFrame): DataFrame = {
-    df.withColumn("Transaction Amount", abs(col("Transaction Amount")))
-      .withColumn("Transaction Amount", col("Transaction Amount").cast("double"))
-      .withColumn("Age", col("Age").cast("integer"))
-      .withColumn("Account Balance", col("Account Balance").cast("double"))
-      .withColumn("Account Balance After Transaction", col("Account Balance After Transaction").cast("double"))
-      .withColumn("Branch ID", col("Branch ID").cast("integer"))
+    df.withColumn("transaction_amount", abs(col("transaction_amount")))
+      .withColumn("transaction_amount", col("transaction_amount").cast("double"))
+      .withColumn("age", col("age").cast("integer"))
+      .withColumn("account_balance", col("account_balance").cast("double"))
+      .withColumn("account_balance_after_transaction", col("account_balance_after_transaction").cast("double"))
+      .withColumn("branch_id", col("branch_id").cast("integer"))
   }
 }

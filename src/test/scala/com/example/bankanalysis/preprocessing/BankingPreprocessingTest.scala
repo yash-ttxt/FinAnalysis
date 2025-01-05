@@ -27,7 +27,7 @@ class BankingPreprocessingTest extends AnyFunSuite with BeforeAndAfterAll {
     val dataset = DatasetLoader.loadBankingDataset(spark, testingDataPath)
     val preprocessor = BankingPreprocessor
     val processedData = preprocessor.process(dataset)
-    assert(processedData.count() > 0)
+    assert(processedData.count() == 14)
   }
 
   private def initializeSparkSession(): SparkSession = {

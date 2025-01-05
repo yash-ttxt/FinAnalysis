@@ -12,6 +12,13 @@ abstract class BasePreprocessor {
   def relevantColumns(): List[String]
 
   /**
+   * Cleans the input DataFrame by removing invalid transactions and filling missing values.
+   * @param df Input DataFrame
+   * @return Cleaned DataFrame
+   */
+  def cleanData(df: DataFrame): DataFrame
+
+  /**
    * Select a subset of columns from a DataFrame
    * @param df Input DataFrame
    * @param columns List of columns to select
@@ -22,11 +29,11 @@ abstract class BasePreprocessor {
   }
 
   /**
-   * Cleans the input DataFrame by removing invalid transactions and filling missing values.
+   * Renames columns in the input DataFrame
    * @param df Input DataFrame
-   * @return Cleaned DataFrame
+   * @return DataFrame with renamed columns
    */
-  def cleanData(df: DataFrame): DataFrame
+  def renameColumns(df: DataFrame): DataFrame
 
   /**
    * Preprocesses the input DataFrame by ensuring correct data types and adding new columns.
@@ -42,7 +49,8 @@ abstract class BasePreprocessor {
    */
   def process(df: DataFrame): DataFrame = {
     val cleanedData = cleanData(df)
-    val selectedColumns = selectColumns(cleanedData, relevantColumns())
-    preprocessData(selectedColumns)
+    val selectedColumnsDf = selectColumns(cleanedData, relevantColumns())
+    val renamedColumnsDf = renameColumns(selectedColumnsDf)
+    preprocessData(renamedColumnsDf)
   }
 }
