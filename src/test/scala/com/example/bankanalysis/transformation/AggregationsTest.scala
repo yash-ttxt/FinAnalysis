@@ -12,7 +12,7 @@ class AggregationsTest extends BaseTest {
   override protected var spark: SparkSession = _
 
   test("testTop10TotalTransactionAmountByCustomer") {
-    val dataset = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Aggregations_Testing.csv")
+    val dataset = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
     val preprocessedData = BankingPreprocessor.process(dataset)
     val aggregatedData = Aggregations.top10TotalTransactionAmountByCustomer(preprocessedData)
 //    println(aggregatedData.collect().mkString("\n"))
@@ -21,7 +21,7 @@ class AggregationsTest extends BaseTest {
   }
 
   test("testMonthlyTransactionVolumeByBranch") {
-    val dataset = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Aggregations_Testing.csv")
+    val dataset = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
     val preprocessedData = BankingPreprocessor.process(dataset)
     val aggregatedData = Aggregations.monthlyTransactionVolumeByBranch(preprocessedData)
 //    println(aggregatedData.collect().mkString("\n"))
