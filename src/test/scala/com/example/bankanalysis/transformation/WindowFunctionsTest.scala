@@ -15,6 +15,7 @@ class WindowFunctionsTest extends BaseTest {
     val preprocessedData = BankingPreprocessor.process(df)
     val aggregatedDf = WindowFunctions.weeklyAverageTransactionAmountByCustomer(preprocessedData)
     println(aggregatedDf.collect().mkString("\n"))
+    // Todo: Add expected output
     assert(1==1)
   }
 

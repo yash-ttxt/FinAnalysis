@@ -1,20 +1,27 @@
 package com.example.bankanalysis.transformation
 
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions._
 import org.apache.spark.sql.expressions.Window
+import org.apache.spark.sql.functions._
 
 object WindowFunctions {
   def weeklyAverageTransactionAmountByCustomer(df: DataFrame): DataFrame = {
     val windowSpec = Window.partitionBy("email").orderBy(col("transaction_date").cast("timestamp").cast("Long")).rangeBetween(-7 * 86400, 0)
     df
-      .withColumn("weekly_avg_transaction_amount", avg(col("transaction_amount")).over(windowSpec))
-      .select("email", "transaction_date", "transaction_amount", "weekly_avg_transaction_amount")
+      .withColumn("transaction_date", to_timestamp(col("transaction_date"), "MM/dd/yyyy"))
+      .groupBy(col("email"), window(col("transaction_date"), "7 days").alias("weekly_window"))
+      .agg(avg(col("transaction_amount")).as("weekly_avg_transaction_amount"))
+      .select(
+        col("email"),
+        col("weekly_window.start").alias("window_start"),
+        col("weekly_window.end").alias("window_end"),
+        col("weekly_avg_transaction_amount")
+      )
   }
 
   def customerRankByBranchOnTransactionAmount(df: DataFrame): DataFrame = {
     val aggregatedDf = df.groupBy("branch_id", "email").agg(sum("transaction_amount").as("total_transaction_amount"))
     val windowSpec = Window.partitionBy("branch_id").orderBy(col("total_transaction_amount").desc)
-    aggregatedDf.withColumn("rank", dense_rank().over(windowSpec))
+    aggregatedDf.withColumn("rank", dense_rank().over(windowSpec)).filter(col("rank") === 1).drop("rank")
   }
 }

@@ -1,0 +1,48 @@
+package utils
+
+import org.apache.spark.sql.types._
+
+object StreamSchemaProvider {
+  def stream_schema(): StructType = StructType(Seq(
+    StructField("Customer ID", IntegerType, true),
+    StructField("First Name", StringType, true),
+    StructField("Last Name", StringType, true),
+    StructField("Age", IntegerType, true),
+    StructField("Gender", StringType, true),
+    StructField("Address", StringType, true),
+    StructField("City", StringType, true),
+    StructField("Contact Number", StringType, true),
+    StructField("Email", StringType, true),
+    StructField("Account Type", StringType, true),
+    StructField("Account Balance", DoubleType, true),
+    StructField("Date Of Account Opening", DateType, true),
+    StructField("Last Transaction Date", DateType, true),
+    StructField("TransactionID", IntegerType, true),
+    StructField("Transaction Date", DateType, true),
+    StructField("Transaction Type", StringType, true),
+    StructField("Transaction Amount", DoubleType, true),
+    StructField("Account Balance After Transaction", DoubleType, true),
+    StructField("Branch ID", IntegerType, true),
+    StructField("Loan ID", IntegerType, true),
+    StructField("Loan Amount", DoubleType, true),
+    StructField("Loan Type", StringType, true),
+    StructField("Interest Rate", DoubleType, true),
+    StructField("Loan Term", IntegerType, true),
+    StructField("Approval/Rejection Date", DateType, true),
+    StructField("Loan Status", StringType, true),
+    StructField("CardID", IntegerType, true),
+    StructField("Card Type", StringType, true),
+    StructField("Credit Limit", DoubleType, true),
+    StructField("Credit Card Balance", DoubleType, true),
+    StructField("Minimum Payment Due", DoubleType, true),
+    StructField("Payment Due Date", DateType, true),
+    StructField("Last Credit Card Payment Date", DateType, true),
+    StructField("Rewards Points", IntegerType, true),
+    StructField("Feedback ID", IntegerType, true),
+    StructField("Feedback Date", DateType, true),
+    StructField("Feedback Type", StringType, true),
+    StructField("Resolution Status", StringType, true),
+    StructField("Resolution Date", DateType, true),
+    StructField("Anomaly", IntegerType, true),
+  ))
+}
