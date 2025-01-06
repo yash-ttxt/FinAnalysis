@@ -4,6 +4,7 @@ import com.example.bankanalysis.ingestion.DatasetLoader
 import com.example.bankanalysis.preprocessing.BankingPreprocessor
 import com.example.bankanalysis.transformation.SQL
 import utils.SparkSessionProvider
+import org.apache.spark.sql.SparkSession
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -11,18 +12,7 @@ import java.time.format.DateTimeFormatter
 object main {
   def main(args: Array[String]): Unit = {
     val dotenv = Dotenv.load()
-    val spark = SparkSessionProvider.getSparkSession(dotenv.get("SPARK_APP_NAME"), dotenv.get("SPARK_MASTER"))
-
-    // Add the ETL code here.
-//    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-//    val dataset = DatasetLoader.loadBankingDataset(spark, dotenv.get("RAW_BANKING_DATASET_PATH")+s"_${currentDate}.csv")
-//    val preprocessor = BankingPreprocessor
-//    val processedData = preprocessor.process(dataset)
-//    processedData.createOrReplaceTempView("banking")
-//    println(SQL.transactionWithHighTransactionAmount(spark, "banking").show())
-//    println(SQL.customersWithHighAccountBalance(spark, "banking", SQL.highAccountBalanceThreshold(spark, "banking")).show())
-//    processedData.write.mode("append").parquet(dotenv.get("PROCESSED_PARQUET_DATA_PATH"))
-//    processedData.write.mode("append").json(dotenv.get("PROCESSED_JSON_DATA_PATH"))
+    implicit val spark: SparkSession = SparkSessionProvider.getSparkSession(dotenv.get("SPARK_APP_NAME"), dotenv.get("SPARK_MASTER"))
 
     Batch.main(spark)
 
