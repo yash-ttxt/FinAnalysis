@@ -4,9 +4,8 @@ import com.example.bankanalysis.BaseTest
 import com.example.bankanalysis.ingestion.DatasetLoader
 import com.example.bankanalysis.preprocessing.BankingPreprocessor
 import org.apache.spark.sql.SparkSession
-import org.scalatest.BeforeAndAfter
 
-class StorageOptimizationTest extends BaseTest with BeforeAndAfter {
+class StorageOptimizationTest extends BaseTest {
   override protected var SparkAppName: String = "StorageOptimizationTest"
   override protected var SparkMaster: String = "local[*]"
   override protected var spark: SparkSession = _

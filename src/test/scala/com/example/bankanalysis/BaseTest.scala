@@ -2,10 +2,11 @@ package com.example.bankanalysis
 
 import org.apache.spark.sql.SparkSession
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 import utils.SparkSessionProvider
 
-abstract class BaseTest extends AnyFunSuite with BeforeAndAfterAll {
+abstract class BaseTest extends AnyFunSuite with BeforeAndAfterAll with BeforeAndAfter {
   protected var SparkAppName: String
   protected var SparkMaster: String
   protected var spark: SparkSession
