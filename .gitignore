@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 data/processed/*
+data/temp/*
 
 ### IntelliJ IDEA ###
 .idea/*
