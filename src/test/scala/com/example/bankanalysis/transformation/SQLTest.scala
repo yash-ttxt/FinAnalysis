@@ -12,14 +12,14 @@ class SQLTest extends BaseTest {
   private val tableName = "SQLTest"
 
   before {
-    val df = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
+    val df = DatasetLoader.loadBankingDataset("src/test/resources/data/raw/Transformations_Testing.csv")(spark)
     val preprocessedDf = BankingPreprocessor.process(df)
     preprocessedDf.createOrReplaceTempView(tableName)
   }
 
   test("customersWithHighAccountBalance") {
     val highAccountBalanceThreshold = 7000.0
-    val result = SQL.customersWithHighAccountBalance(spark, tableName, highAccountBalanceThreshold)
+    val result = SQL.customersWithHighAccountBalance(tableName, highAccountBalanceThreshold)(spark)
 //    result.write.option("header", "true").csv("src/test/resources/data/processed/Customers_With_High_Account_Balance")
 //    print("customersWithHighAccountBalance")
 //    println(result.collect())
@@ -29,14 +29,14 @@ class SQLTest extends BaseTest {
   }
 
   test("highAccountBalanceThreshold") {
-    val result = SQL.highAccountBalanceThreshold(spark, tableName)
+    val result = SQL.highAccountBalanceThreshold(tableName)(spark)
     print("highAccountBalanceThreshold")
 //    println(result)
     assert(result == 5642.067142857144)
   }
 
   test("transactionWithHighTransactionAmount") {
-    val result = SQL.transactionWithHighTransactionAmount(spark, tableName)
+    val result = SQL.transactionWithHighTransactionAmount(tableName)(spark)
 //    result.write.option("header", "true").csv("src/test/resources/data/processed/Transaction_With_High_Transaction_Amount")
 //    print("transactionWithHighTransactionAmount")
 //    println(result.collect())

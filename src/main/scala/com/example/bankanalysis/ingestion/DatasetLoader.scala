@@ -18,12 +18,11 @@ object DatasetLoader {
    * @return Dataset[Row]
    */
   protected def load(
-    spark: SparkSession,
     path: String,
     schema: Option[StructType],
     format: String = "csv",
     options: Map[String, String] = Map("header" -> "true", "inferSchema" -> "true")
-  ): Dataset[Row] = {
+  )(implicit spark: SparkSession): Dataset[Row] = {
     try {
       val reader = spark.read.format(format).options(options)
       schema match {
@@ -41,10 +40,10 @@ object DatasetLoader {
    * @param spark SparkSession
    * @return Dataset[Row]
    */
-  def loadBankingDataset(spark: SparkSession, path: String): Dataset[Row] = {
+  def loadBankingDataset(path: String)(implicit spark: SparkSession): Dataset[Row] = {
     val config = ConfigFactory.load()
     val format = config.getString("spark.fileFormats.defaultFormat")
     val options = config.getObject("spark.options").unwrapped().asInstanceOf[java.util.Map[String, String]].asScala.toMap
-    load(spark, path, None, format, options)
+    load(path, None, format, options)
   }
 }

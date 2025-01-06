@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 
 object main {
   def main(args: Array[String]): Unit = {
-    val dotenv = Dotenv.load()
+    implicit val dotenv: Dotenv = Dotenv.load()
     implicit val spark: SparkSession = SparkSessionProvider.getSparkSession(dotenv.get("SPARK_APP_NAME"), dotenv.get("SPARK_MASTER"))
 
     Batch.main(spark)

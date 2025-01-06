@@ -11,7 +11,7 @@ class StorageOptimizationTest extends BaseTest {
   override protected var spark: SparkSession = _
 
   test("toParquetPartitioned") {
-    val df = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
+    val df = DatasetLoader.loadBankingDataset("src/test/resources/data/raw/Transformations_Testing.csv")(spark)
     val preprocessedDf = BankingPreprocessor.process(df)
     StorageOptimization.toParquetPartitioned(preprocessedDf, "src/test/resources/data/temp/parquet_format", Array("branch_id"))
     val verificationDf = spark.read.options(Map("inferSchema" -> "true")).parquet("src/test/resources/data/temp/parquet_format")
@@ -24,7 +24,7 @@ class StorageOptimizationTest extends BaseTest {
   }
 
   test("testBucketing") {
-    val df = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
+    val df = DatasetLoader.loadBankingDataset("src/test/resources/data/raw/Transformations_Testing.csv")(spark)
     val preprocessedDf = BankingPreprocessor.process(df)
     val startTsWithoutBucketing = System.currentTimeMillis()
     StorageOptimization.top10TransactionVolumeByCustomerId(preprocessedDf).collect()

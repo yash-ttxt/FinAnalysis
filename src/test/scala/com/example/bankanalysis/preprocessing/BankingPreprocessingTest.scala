@@ -12,7 +12,7 @@ class BankingPreprocessingTest extends BaseTest {
   private val testingDataPath = "src/test/resources/data/raw/Comprehensive_Banking_Database_Testing.csv"
 
   test("testPreprocess") {
-    val dataset = DatasetLoader.loadBankingDataset(spark, testingDataPath)
+    val dataset = DatasetLoader.loadBankingDataset(testingDataPath)(spark)
     val preprocessor = BankingPreprocessor
     val processedData = preprocessor.process(dataset)
     assert(processedData.count() == 14)

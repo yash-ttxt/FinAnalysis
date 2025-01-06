@@ -10,7 +10,7 @@ class DatasetLoaderTest extends BaseTest {
   private val testingDataPath = "src/test/resources/data/raw/Comprehensive_Banking_Database_Testing.csv"
 
   test("testLoadBankingDataset") {
-    val dataset = DatasetLoader.loadBankingDataset(spark, testingDataPath)
+    val dataset = DatasetLoader.loadBankingDataset(testingDataPath)(spark)
     assert(dataset.count() > 0)
   }
 }
