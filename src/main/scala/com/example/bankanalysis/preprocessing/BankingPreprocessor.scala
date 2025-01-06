@@ -12,18 +12,8 @@ object BankingPreprocessor extends BasePreprocessor {
   override def relevantColumns(): List[String] = config.getStringList("spark.comprehensiveBankingData.relevantColumns").asScala.toList
 
   override protected def cleanData(df: DataFrame): DataFrame = {
-    val cityToBranchID = df.filter(col("City").isNotNull && col("Branch ID").isNotNull)
-      .select("City", "Branch ID")
-      .distinct()
-      .collect()
-      .map(row => row.getString(0) -> row.getInt(1))
-      .toMap
-
-    val getBranchID = udf((city: String) => cityToBranchID.getOrElse(city, -1))
-
     df.withColumn("Transaction Date", to_date(col("Transaction Date"), "MM/dd/yyyy"))
       .withColumn("Calculated Transaction Amount", abs(col("Account Balance").cast("double") - col("Account Balance After Transaction").cast("double")))
-      .withColumn("Branch ID from City", getBranchID(col("City")))
       .na.fill(Map(
         "First Name" -> "Unknown",
         "Last Name" -> "Unknown",
