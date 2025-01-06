@@ -29,13 +29,13 @@ class StorageOptimizationTest extends BaseTest {
     val startTsWithoutBucketing = System.currentTimeMillis()
     StorageOptimization.top10TransactionVolumeByCustomerId(preprocessedDf).collect()
     val timeTakenWithoutBucketing = System.currentTimeMillis() - startTsWithoutBucketing
-    println(s"Time taken for top10TransactionVolumeByCustomerId without bucketing: ${timeTakenWithoutBucketing} ms")
+    println(s"Time taken for top10TransactionVolumeByCustomerId without bucketing: $timeTakenWithoutBucketing ms")
     StorageOptimization.toBucketedTable(preprocessedDf, "banking_analysis", "customer_id", 8)
     val bucketedData = spark.table("banking_analysis")
     val startTsWithBucketing = System.currentTimeMillis()
     StorageOptimization.top10TransactionVolumeByCustomerId(bucketedData).collect()
     val timeTakenWithBucketing = System.currentTimeMillis() - startTsWithBucketing
-    println(s"Time taken for top10TransactionVolumeByCustomerId with bucketing: ${timeTakenWithBucketing} ms")
+    println(s"Time taken for top10TransactionVolumeByCustomerId with bucketing: $timeTakenWithBucketing ms")
     assert(timeTakenWithoutBucketing > timeTakenWithBucketing)
   }
 
