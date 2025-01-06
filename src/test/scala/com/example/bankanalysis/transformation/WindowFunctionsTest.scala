@@ -17,4 +17,12 @@ class WindowFunctionsTest extends BaseTest {
     println(aggregatedDf.collect().mkString("\n"))
     assert(1==1)
   }
+
+  test("testCustomerRankByBranchOnTransactionAmount") {
+    val df = DatasetLoader.loadBankingDataset(spark, "src/test/resources/data/raw/Transformations_Testing.csv")
+    val preprocessedData = BankingPreprocessor.process(df)
+    val aggregatedDf = WindowFunctions.customerRankByBranchOnTransactionAmount(preprocessedData)
+    val expectedDf = spark.read.option("header", "true").option("infer_schema", "true").csv("src/test/resources/data/processed/Customer_Rank_By_Branch_On_Transactions.csv")
+    assert(aggregatedDf.except(expectedDf).count() == 0)
+  }
 }

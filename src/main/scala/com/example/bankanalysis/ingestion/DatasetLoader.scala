@@ -17,7 +17,7 @@ object DatasetLoader {
    * @param options Options to pass to the reader
    * @return Dataset[Row]
    */
-  def load(
+  protected def load(
     spark: SparkSession,
     path: String,
     schema: Option[StructType],
