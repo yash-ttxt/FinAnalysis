@@ -11,7 +11,7 @@ object BankingPreprocessor extends BasePreprocessor {
   private val config = ConfigFactory.load()
   override def relevantColumns(): List[String] = config.getStringList("spark.comprehensiveBankingData.relevantColumns").asScala.toList
 
-  override def cleanData(df: DataFrame): DataFrame = {
+  override protected def cleanData(df: DataFrame): DataFrame = {
     val cityToBranchID = df.filter(col("City").isNotNull && col("Branch ID").isNotNull)
       .select("City", "Branch ID")
       .distinct()
@@ -32,12 +32,12 @@ object BankingPreprocessor extends BasePreprocessor {
       ))
   }
 
-  override def renameColumns(df: DataFrame): DataFrame = {
+  override protected def renameColumns(df: DataFrame): DataFrame = {
     val renameColVals = config.getObject("spark.comprehensiveBankingData.rawColNameToProcessedColName").unwrapped().asInstanceOf[java.util.Map[String, String]].asScala.toMap
     renameColVals.foldLeft(df)((accDf, colName) => accDf.withColumnRenamed(colName._1, colName._2))
   }
 
-  override def preprocessData(df: DataFrame): DataFrame = {
+  override protected def preprocessData(df: DataFrame): DataFrame = {
     df.withColumn("transaction_amount", abs(col("transaction_amount")))
       .withColumn("transaction_amount", col("transaction_amount").cast("double"))
       .withColumn("age", col("age").cast("integer"))
