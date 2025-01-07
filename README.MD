@@ -38,3 +38,27 @@ To go through the overall design of the project.
    3. Currently only console output for stream processing is supported. But a similar concept of system design used in batch processing will be used in the future.
 
      
+## Tasks
+
+1. Section 1: Data Ingestion and Preprocessing
+   1. Code in `src/main/scala/com/example/bankanalysis/ingestion` & `src/main/scala/com/example/bankanalysis/preprocessing`
+2. Section 2: Advanced Spark Operations
+   1. Aggregations: Code in `src/main/scala/com/example/bankanalysis/transformations/Aggregations.scala`
+   2. Window Functions: Code in `src/main/scala/com/example/bankanalysis/transformations/WindowFunctions.scala`
+   3. Partitioning and Storage Optimization: Code in `src/main/scala/com/example/bankanalysis/transformations/StorageOptimization.scala`
+   4. Spark SQL: Code in `src/main/scala/com/example/bankanalysis/transformations/SQL.scala`
+3. Section 3: ETL Pipeline Design
+   1. Pipeline Design: Overall Code available in `src/main/scala/com/example/bankanalysis/etl/BatchProcessing.scala`
+   2. Stream Data Ingestion: Simulation code in `src/main/utils/SimulateStream.scala` and processing code in `src/main/scala/com/example/bankanalysis/etl/streamProcessing`
+   3. Error Handling and Monitoring: Code in `src/main/scala/utils/Logger.scala` and `src/main/scala/utils/ETLMonitor.scala`
+   4. Scalability and Automation:
+      1. Recommendations for Scalability:
+         To ensure scalable and efficient ETL processes, use cloud storage solutions like AWS S3 or Azure Blob for fault-tolerant and distributed data handling, and adopt distributed computing frameworks like Apache Spark. Optimize storage with columnar file formats like Parquet or ORC and enhance performance using partitioning and bucketing based on query patterns. Enable auto-scaling to dynamically adjust resources, and cache frequently accessed data using Spark's in-memory capabilities. Leverage Spark's Catalyst optimizer and Tungsten engine for query optimization, fine-tuning shuffle partitions, joins, and memory. For streaming, parallelize ingestion and optimize latency with structured streaming, stateful operations, and watermarks.
+      2. Recommendations for Automation:
+         To automate ETL pipelines, use workflow orchestration tools like Apache Airflow, Azure Data Factory, or Google Cloud Composer for scheduling and managing workflows. For simpler setups, use cron jobs for periodic scheduling or adopt event-driven triggers with tools like AWS Lambda for real-time processing. Parameterize configurations to adapt pipelines dynamically. Monitor performance and set up real-time alerts using Prometheus, Grafana, or cloud monitoring solutions. Integrate with CI/CD tools like Jenkins or GitHub Actions for seamless testing and deployment.
+4. Section 4: Dashoard Design & Visualization
+   1. Code for interactive dashboard is present in `visualization/app.py`. Use `pip install -r visualization/requirements.txt` to install the required libraries.
+5. Section 5: Bonus Tasks
+   1. Data Quality Checks: Code in `src/main/scala/com/example/bankanalysis/ingestion/DataQualityCheck.scala`
+   2. Run using `sbt run` -> select `DataQualityCheck` to run the data quality checks.
+        
