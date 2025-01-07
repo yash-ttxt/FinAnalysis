@@ -5,6 +5,7 @@ target/
 
 data/processed/*
 data/temp/*
+logs/*
 
 ### IntelliJ IDEA ###
 .idea/*

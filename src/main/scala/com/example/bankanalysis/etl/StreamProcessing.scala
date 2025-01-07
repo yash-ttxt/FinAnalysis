@@ -29,10 +29,13 @@ class StreamProcessing extends Base {
   override protected def transformAndStore(df: DataFrame, transformation: DataFrame => DataFrame, storageOptions: Map[String, Map[String, String]]): Unit = {
     val transformedDf = transformation(df)
     storageOptions.foreach { case (format, options) =>
+      print(s"Writing to $format")
+      println(options)
       val query: StreamingQuery = transformedDf.writeStream
-        .format(format)
-        .outputMode(options("outputMode"))
-        .option("truncate", "false")
+        .format("parquet")
+        .outputMode("append")
+        .option("path", options("path"))
+        .option("checkpointLocation", options("checkpointLocation"))
         .trigger(Trigger.ProcessingTime("20 seconds")) // Todo: Read from config
         .start()
       query.awaitTermination(1*60*1000) // Todo: Read from config
