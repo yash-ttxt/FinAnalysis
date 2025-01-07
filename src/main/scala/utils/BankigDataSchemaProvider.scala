@@ -2,8 +2,8 @@ package utils
 
 import org.apache.spark.sql.types._
 
-object StreamSchemaProvider {
-  val stream_schema: StructType = StructType(Seq(
+object BankigDataSchemaProvider {
+  val schema: StructType = StructType(Seq(
     StructField("Customer ID", IntegerType, true),
     StructField("First Name", StringType, true),
     StructField("Last Name", StringType, true),

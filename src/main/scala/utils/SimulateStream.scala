@@ -6,6 +6,8 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{col, current_date, lit, row_number}
 import org.apache.spark.sql.streaming.Trigger
 
+import java.nio.file.{Files, Paths}
+
 object BankingStream {
   /**
    * This method is responsible for simulating the stream of data
@@ -18,6 +20,18 @@ object BankingStream {
       .getOrCreate()
 
     val config: Config = ConfigFactory.load("application.conf")
+
+    val directories = Seq(
+      config.getString("spark.stream.checkpointPath"),
+      config.getString("spark.stream.path")
+    )
+
+    directories.foreach { dir =>
+      if (!Files.exists(Paths.get(dir))) {
+        println(s"Creating directory :::: $dir")
+        Files.createDirectory(Paths.get(dir))
+      }
+    }
 
     val rawData = spark.read.option("header", "true").option("inferSchema", "true").csv("data/raw/Comprehensive_Banking_Database.csv")
       .withColumn("Transaction Date", current_date())

@@ -16,7 +16,6 @@ object Executor {
   def main(etlJob: String)(implicit spark: SparkSession): Unit = {
     try {
       ETLMonitor.updateJobStatus(etlJob, "STARTED")
-      ETLMonitor.updateJobStartTime(etlJob)
       etlJob match {
         case TOP_10_CUSTOMER_BY_TRANSACTION_VOLUME => new Top10CustomerByTransactionVolume().main()
         case MONTHLY_TRANSACTION_VOLUME_BY_BRANCH => new MonthlyTransactionVolumeByBranch().main()

@@ -52,6 +52,8 @@ object ETLMonitor {
   def updateJobStatus(jobName: String, status: String): Unit = {
     if (status == "FAILED" || status == "COMPLETED") {
       updateJobEndTime(jobName)
+    } else if (status == "STARTED") {
+      updateJobStartTime(jobName)
     }
     jobInfo.update(jobName, jobInfo.getOrElse(jobName, Map.empty) + ("status" -> status))
   }

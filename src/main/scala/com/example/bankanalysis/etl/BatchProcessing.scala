@@ -4,7 +4,7 @@ import com.example.bankanalysis.ingestion.DatasetLoader
 import com.example.bankanalysis.preprocessing.BankingPreprocessor
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import utils.{Logger, TransformationsConfiguration, ETLMonitor}
+import utils.{Logger, TransformationsConfiguration, ETLMonitor, AppEnv}
 
 import scala.jdk.CollectionConverters._
 
@@ -26,13 +26,23 @@ object BatchProcessing{
    * @return DataFrame
    */
   protected def getDataFrame()(implicit spark: SparkSession): DataFrame = {
+    val datasetBasePath = AppEnv.get("RAW_BANKING_DATASET_PATH").getOrElse("")
     // Todo: Add logic here to load data using current date. But will add this later as when testing creates an unnecessary hassle.
     //    val currentDate = java.time.LocalDate.now().toString
-    //    val dataset = DatasetLoader.loadBankingDataset(sys.env("RAW_BANKING_DATASET_BASE_PATH")+s"_$currentDate.csv")
-    val dataset = DatasetLoader.loadBankingDataset(sys.env("RAW_BANKING_DATASET_PATH"))
+    //    val dataset = DatasetLoader.loadBankingDataset(AppEnv.env("RAW_BANKING_DATASET_PATH")+s"_$currentDate.csv")
+    val dataset = DatasetLoader.loadBankingDataset(datasetBasePath)
     BankingPreprocessor.process(dataset)
     dataset.persist()
     dataset
+  }
+
+  /**
+   * This method is responsible for preprocessing the data
+   * @param df: DataFrame
+   * @return DataFrame
+   */
+  def preprocess(df: DataFrame): DataFrame = {
+    BankingPreprocessor.process(df)
   }
 
   /**
@@ -89,10 +99,11 @@ object BatchProcessing{
     try{
       val transformationsAndStorageOptions = getTransformationsConf
       val df: DataFrame = getDataFrame
+      val dfPreprocessed = preprocess(df)
       transformationsAndStorageOptions.foreach { case (transformation, storageOptions) =>
         try {
           ETLMonitor.updateJobStatus(TransformationsConfiguration.names(transformation), "STARTED")
-          transformAndStore(df, transformation, storageOptions)
+          transformAndStore(dfPreprocessed, transformation, storageOptions)
           ETLMonitor.updateJobStatus(TransformationsConfiguration.names(transformation), "COMPLETED")
         } catch {
           case e: Exception =>

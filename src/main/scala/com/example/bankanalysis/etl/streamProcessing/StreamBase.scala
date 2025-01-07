@@ -2,7 +2,7 @@ package com.example.bankanalysis.etl.streamProcessing
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import utils.StreamSchemaProvider.stream_schema
+import utils.BankigDataSchemaProvider.schema
 import com.example.bankanalysis.preprocessing.BankingPreprocessor
 import org.apache.spark.sql.streaming.Trigger
 
@@ -27,7 +27,7 @@ abstract class StreamBase {
       .format("json")
       .option("path", applicationConfig.getString("spark.stream.path"))
       .option("header", "true")
-      .schema(stream_schema)
+      .schema(schema)
       .load()
 
     val processedDf = BankingPreprocessor.process(df)
