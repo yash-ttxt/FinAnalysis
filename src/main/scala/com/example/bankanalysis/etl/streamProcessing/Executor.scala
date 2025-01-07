@@ -1,6 +1,5 @@
 package com.example.bankanalysis.etl.streamProcessing
 
-import io.github.cdimascio.dotenv.Dotenv
 import org.apache.spark.sql.SparkSession
 import utils.{Logger, ETLMonitor}
 import etlJobConstants._
@@ -13,9 +12,8 @@ object Executor {
    * This method is responsible for executing the ETL job
    * @param etlJob: String
    * @param spark: SparkSession
-   * @param dotenv: Dotenv
    */
-  def main(etlJob: String)(implicit spark: SparkSession, dotenv: Dotenv): Unit = {
+  def main(etlJob: String)(implicit spark: SparkSession): Unit = {
     try {
       ETLMonitor.updateJobStatus(etlJob, "STARTED")
       ETLMonitor.updateJobStartTime(etlJob)

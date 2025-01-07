@@ -12,8 +12,8 @@ import com.example.bankanalysis.etl.streamProcessing.{etlJobConstants, etlProces
 object main {
   def main(args: Array[String]): Unit = {
     Logger.logMessage(s"Starting the application: ${System.currentTimeMillis()}")
-    implicit val dotenv: Dotenv = Dotenv.load()
-    implicit val spark: SparkSession = SparkSessionProvider.getSparkSession(dotenv.get("SPARK_APP_NAME"), dotenv.get("SPARK_MASTER"))
+    val dotenv: Dotenv = Dotenv.load()
+    implicit val spark: SparkSession = SparkSessionProvider.getSparkSession(sys.env("SPARK_APP_NAME"), sys.env("SPARK_MASTER"))
 
     // Expects either BATCH or STREAM as the first argument
     val option = args(0)

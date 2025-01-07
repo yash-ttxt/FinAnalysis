@@ -2,7 +2,6 @@ package com.example.bankanalysis.etl.streamProcessing
 
 import com.example.bankanalysis.transformation.SQL
 import com.typesafe.config.{Config, ConfigFactory}
-import io.github.cdimascio.dotenv.Dotenv
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 /**
@@ -15,10 +14,9 @@ class TransactionWithHighTransactionAmount extends StreamBase {
    * This method is responsible for transforming the stream of data
    * @param df: DataFrame
    * @param spark: SparkSession
-   * @param dotenv: Dotenv
    * @return DataFrame
    */
-  override protected def transform(df: DataFrame)(implicit spark: SparkSession, dotenv: Dotenv): DataFrame = {
+  override protected def transform(df: DataFrame)(implicit spark: SparkSession): DataFrame = {
     df.createOrReplaceTempView(etlJobConstants.TRANSACTIONS_WITH_HIGH_TRANSACTION_AMOUNT)
     SQL.transactionWithHighTransactionAmount(etlJobConstants.TRANSACTIONS_WITH_HIGH_TRANSACTION_AMOUNT)
 

@@ -3,7 +3,6 @@ package com.example.bankanalysis.etl
 import com.example.bankanalysis.ingestion.DatasetLoader
 import com.example.bankanalysis.preprocessing.BankingPreprocessor
 import com.typesafe.config.{Config, ConfigFactory}
-import io.github.cdimascio.dotenv.Dotenv
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import utils.{Logger, TransformationsConfiguration, ETLMonitor}
 
@@ -24,14 +23,13 @@ object BatchProcessing{
   /**
    * This method is responsible for getting the data
    * @param spark: SparkSession
-   * @param dotenv: Dotenv
    * @return DataFrame
    */
-  protected def getDataFrame()(implicit spark: SparkSession, dotenv: Dotenv): DataFrame = {
+  protected def getDataFrame()(implicit spark: SparkSession): DataFrame = {
     // Todo: Add logic here to load data using current date. But will add this later as when testing creates an unnecessary hassle.
     //    val currentDate = java.time.LocalDate.now().toString
-    //    val dataset = DatasetLoader.loadBankingDataset(dotenv.get("RAW_BANKING_DATASET_BASE_PATH")+s"_$currentDate.csv")
-    val dataset = DatasetLoader.loadBankingDataset(dotenv.get("RAW_BANKING_DATASET_PATH"))
+    //    val dataset = DatasetLoader.loadBankingDataset(sys.env("RAW_BANKING_DATASET_BASE_PATH")+s"_$currentDate.csv")
+    val dataset = DatasetLoader.loadBankingDataset(sys.env("RAW_BANKING_DATASET_PATH"))
     BankingPreprocessor.process(dataset)
     dataset.persist()
     dataset
@@ -86,9 +84,8 @@ object BatchProcessing{
   /**
    * This method is responsible for processing the batch of data
    * @param spark: SparkSession
-   * @param dotenv: Dotenv
    */
-  def main()(implicit spark: SparkSession, dotenv: Dotenv): Unit = {
+  def main()(implicit spark: SparkSession): Unit = {
     try{
       val transformationsAndStorageOptions = getTransformationsConf
       val df: DataFrame = getDataFrame
