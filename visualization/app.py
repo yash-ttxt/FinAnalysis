@@ -1,10 +1,10 @@
 import dash
-from dash import dcc, html
-from dash.dependencies import Output, Input
 import dotenv
+import os
 import pandas as pd
 import plotly.express as px
-import os
+from dash import dcc, html
+from dash.dependencies import Output, Input
 
 dotenv.load_dotenv()
 app = dash.Dash(__name__)
