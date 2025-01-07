@@ -48,7 +48,7 @@ abstract class Base {
           case e: Exception =>
             println(s"Error processing transformation: ${e.getMessage}")
             println(e.getStackTrace.mkString("\n"))
-            Logger.logError(e, Option(Array(transformation, storageOptions).toString))
+            Logger.logError(e, Option(Array(transformation, storageOptions).mkString(":::")))
         }
       }
     } catch {

@@ -15,6 +15,7 @@ object bankingStream {
       .appName("SimulateStream")
       .master("local[*]")
       .getOrCreate()
+
     val rawData = spark.read.option("header", "true").option("inferSchema", "true").csv("data/raw/Comprehensive_Banking_Database.csv")
       .withColumn("Transaction Date", current_date())
 

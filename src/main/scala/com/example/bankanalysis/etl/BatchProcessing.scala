@@ -12,6 +12,9 @@ class BatchProcessing extends Base {
   override var config: Config = ConfigFactory.load("transformations.conf")
 
   override protected def getDataFrame()(implicit spark: SparkSession, dotenv: Dotenv): DataFrame = {
+    // Todo: Add logic here to load data using current date. But will add this later as when testing creates an unnecessary hassle.
+//    val currentDate = java.time.LocalDate.now().toString
+//    val dataset = DatasetLoader.loadBankingDataset(dotenv.get("RAW_BANKING_DATASET_BASE_PATH")+s"_$currentDate.csv")
     val dataset = DatasetLoader.loadBankingDataset(dotenv.get("RAW_BANKING_DATASET_PATH"))
     BankingPreprocessor.process(dataset)
     dataset.persist()
