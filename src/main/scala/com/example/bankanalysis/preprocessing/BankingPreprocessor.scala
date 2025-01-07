@@ -9,8 +9,18 @@ import scala.jdk.CollectionConverters._
 
 object BankingPreprocessor extends BasePreprocessor {
   private val config = ConfigFactory.load()
+
+  /**
+   *  @return List of relevant columns
+   */
   override def relevantColumns(): List[String] = config.getStringList("spark.comprehensiveBankingData.relevantColumns").asScala.toList
 
+  /**
+   * This method is responsible for cleaning the data
+   * @param df: DataFrame
+   * @return DataFrame
+   *
+   */
   override protected def cleanData(df: DataFrame): DataFrame = {
     df.withColumn("Transaction Date", to_date(col("Transaction Date"), "MM/dd/yyyy"))
       .withColumn("Calculated Transaction Amount", abs(col("Account Balance").cast("double") - col("Account Balance After Transaction").cast("double")))
@@ -22,11 +32,21 @@ object BankingPreprocessor extends BasePreprocessor {
       ))
   }
 
+  /**
+   * This method is responsible for renaming the columns
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   override protected def renameColumns(df: DataFrame): DataFrame = {
     val renameColVals = config.getObject("spark.comprehensiveBankingData.rawColNameToProcessedColName").unwrapped().asInstanceOf[java.util.Map[String, String]].asScala.toMap
     renameColVals.foldLeft(df)((accDf, colName) => accDf.withColumnRenamed(colName._1, colName._2))
   }
 
+  /**
+   * This method is responsible for preprocessing the data
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   override protected def preprocessData(df: DataFrame): DataFrame = {
     df.withColumn("transaction_amount", abs(col("transaction_amount")))
       .withColumn("transaction_amount", col("transaction_amount").cast("double"))

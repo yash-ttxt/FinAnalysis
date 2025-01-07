@@ -1,27 +1,37 @@
 import com.example.bankanalysis.etl.BatchProcessing
 import com.example.bankanalysis.etl.streamProcessing.Executor
 import io.github.cdimascio.dotenv.Dotenv
-import com.example.bankanalysis.ingestion.DatasetLoader
-import com.example.bankanalysis.preprocessing.BankingPreprocessor
-import com.example.bankanalysis.transformation.SQL
-import utils.SparkSessionProvider
+import com.example.bankanalysis.etl.BatchProcessing
+import utils.{SparkSessionProvider, Logger, ETLMonitor}
 import org.apache.spark.sql.SparkSession
-import utils.Logger
-import com.example.bankanalysis.etl.streamProcessing.etlJobConstants
+import com.example.bankanalysis.etl.streamProcessing.{etlJobConstants, etlProcessConstants}
 
+/**
+ * Main entry point of the application
+ */
 object main {
   def main(args: Array[String]): Unit = {
     Logger.logMessage(s"Starting the application: ${System.currentTimeMillis()}")
     implicit val dotenv: Dotenv = Dotenv.load()
     implicit val spark: SparkSession = SparkSessionProvider.getSparkSession(dotenv.get("SPARK_APP_NAME"), dotenv.get("SPARK_MASTER"))
 
-    val streamProcessing = Executor
-    streamProcessing.main(etlJobConstants.TRANSACTIONS_WITH_HIGH_TRANSACTION_AMOUNT)
-    streamProcessing.main(etlJobConstants.CUSOMTERS_WITH_HIGH_ACCOUNT_BALANCE)
-    streamProcessing.main(etlJobConstants.WEEKLY_AVERAGE_TRANSACTION_BY_CUSTOMER)
-    streamProcessing.main(etlJobConstants.TOP_10_CUSTOMER_BY_TRANSACTION_VOLUME)
-    streamProcessing.main(etlJobConstants.MONTHLY_TRANSACTION_VOLUME_BY_BRANCH)
+    // Expects either BATCH or STREAM as the first argument
+    val option = args(0)
+    option match {
+      case etlProcessConstants.BATCH =>
+        Logger.logMessage("Batch processing")
+        val batchProcessing = BatchProcessing
+        batchProcessing.main()
+      case etlProcessConstants.STREAM =>
+        Logger.logMessage("Stream processing")
+        // For each streaming job, a new class should be created in the streamProcessing package
+        val streamJob = args(1)
+        val streamProcessing = Executor
+        streamProcessing.main(streamJob)
+      case _ => Logger.logError(new Exception("Invalid option"))
+    }
 
+    ETLMonitor.writeMonitorLog()
     spark.stop()
     Logger.logMessage(s"Stopping the application: ${System.currentTimeMillis()}")
   }

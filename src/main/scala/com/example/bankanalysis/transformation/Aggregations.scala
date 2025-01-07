@@ -6,6 +6,11 @@ import org.apache.spark.sql.Row
 
 object Aggregations {
 
+  /**
+   * This method is responsible for getting the top 10 customers by transaction volume
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   def top10TotalTransactionAmountByCustomer(df: DataFrame): DataFrame = {
     df.groupBy(col("email"))
       .agg(sum(col("transaction_amount"))
@@ -15,6 +20,11 @@ object Aggregations {
       .limit(10)
   }
 
+  /**
+   * This method is responsible for getting the monthly transaction volume by branch
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   def monthlyTransactionVolumeByBranch(df: DataFrame): DataFrame = {
     val newDf = df.withColumn("month", month(col("transaction_date")))
     newDf.groupBy(col("month"), col("branch_id"))

@@ -6,6 +6,7 @@ import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.StructType
 import scala.jdk.CollectionConverters._
+import utils.Logger
 
 object DatasetLoader {
   /**

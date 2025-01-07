@@ -10,4 +10,6 @@ object TransformationsConfiguration {
     "weeklyAverageTransactionAmountByCustomer" -> WindowFunctions.weeklyAverageTransactionAmountByCustomer,
     "customerRankByBranchOnTransactionAmount" -> WindowFunctions.customerRankByBranchOnTransactionAmount
   )
+
+  val names: Map[DataFrame => DataFrame, String] = methods.map(_.swap)
 }

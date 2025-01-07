@@ -5,6 +5,11 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 
 object WindowFunctions {
+  /**
+   * This method is responsible for getting the weekly average transaction amount by customer
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   def weeklyAverageTransactionAmountByCustomer(df: DataFrame): DataFrame = {
     val windowSpec = Window.partitionBy("email").orderBy(col("transaction_date").cast("timestamp").cast("Long")).rangeBetween(-7 * 86400, 0)
     df
@@ -19,6 +24,11 @@ object WindowFunctions {
       )
   }
 
+  /**
+   * This method is responsible for getting the customer rank by branch on transaction amount
+   * @param df: DataFrame
+   * @return DataFrame
+   */
   def customerRankByBranchOnTransactionAmount(df: DataFrame): DataFrame = {
     val aggregatedDf = df.groupBy("branch_id", "email").agg(sum("transaction_amount").as("total_transaction_amount"))
     val windowSpec = Window.partitionBy("branch_id").orderBy(col("total_transaction_amount").desc)
