@@ -21,11 +21,9 @@ object Logger {
   private def write(log: String): Unit = {
     val file = new File(s"$logs_path/$logs_file")
     if (!file.exists()) {
-      println("invoked to create folders & files")
       file.getParentFile.mkdirs()
       file.createNewFile()
     }
-    println(s"invoked to write $log in $logs_path/$logs_file")
     val fileWriter = new FileWriter(file, true)
     val pw = new PrintWriter(fileWriter)
     pw.write(log)

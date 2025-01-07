@@ -38,8 +38,8 @@ object bankingStream {
       .format("json")
       .queryName("banking_transactions")
       .trigger(Trigger.ProcessingTime("1 seconds"))
-      .option("checkpointLocation", "data/temp/streaming/checkpoint")
-      .option("path", "data/temp/streaming")
+      .option("checkpointLocation", "data/temp/streaming/simulation/checkpoint")
+      .option("path", "data/temp/streaming/simulation")
       .start()
 
     stream.awaitTermination(4*60*1000)
