@@ -1,0 +1,11 @@
+customer_id,first_name,last_name,age,gender,email,city,account_type,account_balance,transaction_id,transaction_date,transaction_type,transaction_amount,account_balance_after_transaction,branch_id
+3,Joseph,Flores,25,Female,joseph.flores@kag.com,Philadelphia,Current,8277.88,3,2023-04-04,Deposit,839.91,7437.97,82
+4,Kevin,Lee,52,Other,kevin.lee@kag.com,Oklahoma City,Savings,7487.21,4,2023-07-27,Withdrawal,4908.89,12396.1,41
+6,Mark,Taylor,47,Female,mark.taylor@kag.com,Louisville,Current,9295.64,6,2023-04-20,Withdrawal,4914.67,4380.97,63
+10,Joshua,Hall,45,Male,joshua.hall@kag.com,Fort Worth,Current,9554.62,10,2023-12-28,Deposit,1641.59,11196.21,30
+12,Joseph,Flores,25,Female,joseph.flores@kag.com,Philadelphia,Current,8126.85,12,2023-04-03,Deposit,4865.91,12992.76,25
+17,Joseph,Flores,25,Female,joseph.flores@kag.com,Philadelphia,Current,8277.88,17,2023-04-05,Deposit,839.91,7437.97,82
+18,Kevin,Lee,52,Other,kevin.lee@kag.com,Oklahoma City,Savings,7487.21,18,2023-07-28,Withdrawal,4908.89,12396.1,41
+20,Mark,Taylor,47,Female,mark.taylor@kag.com,Louisville,Current,9295.64,20,2023-04-21,Withdrawal,4914.67,4380.97,63
+24,Joshua,Hall,45,Male,joshua.hall@kag.com,Fort Worth,Current,9554.62,24,2023-12-29,Deposit,1641.59,11196.21,30
+26,Joseph,Flores,25,Female,joseph.flores@kag.com,Philadelphia,Current,8126.85,26,2023-04-04,Deposit,4865.91,12992.76,25

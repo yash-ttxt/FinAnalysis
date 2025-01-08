@@ -2,7 +2,9 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.15"
 
-ThisBuild / javacOptions ++= Seq("--release", "17")
+ThisBuild / javacOptions ++= Seq("--release", "11")
+
+Test / fork := true
 
 lazy val root = (project in file("."))
   .settings(
